@@ -12,19 +12,7 @@ const Patient = sequelize.define('Patient', {
       type: Sequelize.STRING,
       unique: true
     },
-    first_name: {
-        type: Sequelize.STRING,
-    },
-    last_name: {
-        type: Sequelize.STRING,
-    },
-    birthdate: {
-        type: Sequelize.STRING
-    },
     password: { type: Sequelize.STRING(1024), },
-    gender: {
-        type: Sequelize.INTEGER
-    },
     tos_approved: {
         type: Sequelize.INTEGER
     }

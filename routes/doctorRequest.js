@@ -91,16 +91,13 @@ router.route('/approveRequest')
                     {
                         where: {
                             doctor_id: id,
-                            email: email,
-                            phone_number: phone_number
+                            email: email
                         },
                         defaults: {
                             doctor_id: id,
                             email: email,
                             first_name: first_name,
                             last_name: last_name,
-                            specialty: specialty,
-                            phone_number: phone_number,
                             password: hashed_password,
                             first_time_logged_in: 1
                         }
@@ -120,21 +117,30 @@ router.route('/approveRequest')
                             }
                         });
 
-                        var mailOptions = {
-                            from: 'joedhernandez95@gmail.com',
-                            to: email,
-                            subject: 'Solicitud Hondumedics',
-                            text: "Su Solicitud ha sido aprobada! Su usuario es: " + email + " y su contraseña temporal es: "+password
+                        if(process.env.ENV === "development"){
+                            console.log("New Doctor Added: ");
+                            console.log(email);
+                            console.log(password);
+                            res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
+                        }else{
+                            var mailOptions = {
+                                from: 'solicitudes@hondumedics.com',
+                                to: email,
+                                subject: 'Solicitud Hondumedics',
+                                text: "Su Solicitud ha sido aprobada! Su usuario es: " + email + " y su contraseña temporal es: "+password
+                            }
+    
+                            transporter.sendMail(mailOptions, function(error,info){
+                                if (error) {
+                                    console.log(error);
+                                }else{
+                                    res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
+                                    console.log('Email sent');
+                                }
+                            });
                         }
 
-                        transporter.sendMail(mailOptions, function(error,info){
-                            if (error) {
-                                console.log(error);
-                            }else{
-                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
-                                console.log('Email sent');
-                            }
-                        });
+                        
                     }
                 });
 

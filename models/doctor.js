@@ -7,24 +7,17 @@ const Doctor = sequelize.define('Doctor', {
       allowNull: false,
       primaryKey: true
     },
+    first_name: {
+        type: Sequelize.STRING
+    },
+    last_name:{
+        type: Sequelize.STRING
+    },
     email: {
       type: Sequelize.STRING,
       unique: true
     },
-    first_name: {
-        type: Sequelize.STRING,
-    },
-    last_name: {
-        type: Sequelize.STRING,
-    },
     password: { type: Sequelize.STRING(1024), },
-    phone_number: {
-        type: Sequelize.STRING,
-        unique: true
-    },
-    specialty: {
-        type: Sequelize.INTEGER
-    },
     first_time_logged_in: {
         type: Sequelize.INTEGER
     }

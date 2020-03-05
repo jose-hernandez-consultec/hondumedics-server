@@ -1,7 +1,7 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
 var router = express.Router();
-
+var jwt = require('jsonwebtoken');
 const { Admin } = require('../models');
 
 /* GET admin listing. */
@@ -39,7 +39,10 @@ router.route('/adminLogin')
                 };
 
                 if(bcrypt.compareSync(req.body.password, password)){
-                    res.status(200).send({login:true,message:"Admin successfully logged in!", admin:admin});
+
+                    var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400});
+                    res.status(200).send({ auth: true, token: token, admin: admin });
+                    //res.status(200).send({login:true,message:"Admin successfully logged in!", admin:admin});
                 }else{
                     res.status(403).send({login:false,message:"Incorrect Password!"});
                 }
@@ -69,15 +72,18 @@ router.route('/addNewAdmin')
                 }
             }
         ).then(function (result) {
-
             var admin = result[0] //the instance of the admin
             var created = result[1]; //boolean stating if the admin was created or not
-
             if (!created){
-                res.status(403).send({added:false,message:"Admin with email already exists!"});
+                res.status(403).send({added:false, message:"Admin with email already exists!"});
             } else {
-                res.status(200).send({added:true,message:"Admin has been added successfully!", admin:admin});
+
+                var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400});
+                res.status(200).send({ auth: true, token: token, admin: admin });
             }
+        }).error(function (error){
+            res.status(500).send({added:false, message:"A server error occured!"});
+
         });
     });
 
