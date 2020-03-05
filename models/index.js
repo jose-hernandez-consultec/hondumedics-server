@@ -16,8 +16,6 @@ module.exports = {
     sequelize,
     Patient,
     Admin,
-    User,
     DoctorRequest,
-    Doctor,
-    Post
+    Doctor
 };

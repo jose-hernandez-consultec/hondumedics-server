@@ -6,9 +6,7 @@ const cors = require('cors');
 const app = express();
 
 //var index = require('./routes/index');
-const users = require('./routes/users');
 const admins = require('./routes/admins');
-const posts = require('./routes/posts');
 const patients = require('./routes/patients');
 const doctor_requests = require('./routes/doctorRequest');
 const doctors = require('./routes/doctors');
@@ -30,9 +28,7 @@ sequelize.sync()
   .catch(err => console.log(err));
 
 //app.use('/', index);
-app.use('/users', users);
 app.use('/admins', admins);
-app.use('/posts', posts);
 app.use('/patients', patients);
 app.use('/doctorRequests', doctor_requests)
 app.use('/doctors', doctors)
