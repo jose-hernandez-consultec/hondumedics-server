@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 
 const { Patient } = require('../models');
-
+const { PatientProfile } = require('../models');
 /* GET admin listing. */
 
 router.route('/')
@@ -70,13 +70,29 @@ router.route('/addNewPatient')
             }
         ).then(function (result) {
 
-            var patient = result[0] //the instance of the admin
+            var patient = result[0]; //the instance of the admin
             var created = result[1]; //boolean stating if the admin was created or not
 
+            console.log(patient.dataValues.first_name);
+            console.log(patient.dataValues.last_name);
             if (!created){
                 res.status(403).send({added:false,message:"Patient with email already exists!"});
             } else {
-                res.status(200).send({added:true,message:"Patient has been added successfully!", patient:patient});
+                var profile = PatientProfile.create({
+                    defaults: {
+                        first_name: patient.dataValues.first_name,
+                        last_name: patient.dataValues.last_name,
+                        profile_picture: null,
+                        home_address: null,
+                        work_address: null,
+                        gender: patient.dataValues.gender,
+                        blood_type: null,
+                        patient_id: patient.dataValues.patient_id,
+                    }
+                }).then (function (result2){
+                    var profile2 = result2[0];
+                    res.status(200).send({added:true,message:"Patient has been added successfully!", patient:patient, patient_id: profile2});
+                })
             }
         });
     });

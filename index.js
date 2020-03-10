@@ -8,8 +8,7 @@ const app = express();
 //var index = require('./routes/index');
 const admins = require('./routes/admins');
 const patients = require('./routes/patients');
-
-
+const patient_profile = require('./routes/patientProfile');
 const doctor_requests = require('./routes/doctorRequest');
 const doctors = require('./routes/doctors');
 const doctor_profile = require('./routes/doctorProfile')
@@ -36,6 +35,7 @@ app.use('/patients', patients);
 
 app.use('/doctorRequests', doctor_requests);
 app.use('/doctors', doctors);
+app.use('/doctorProfile', doctor_profile);
 app.use('/doctorProfile', doctor_profile);
 
 app.listen(PORT, () => {
