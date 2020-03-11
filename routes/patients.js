@@ -79,7 +79,6 @@ router.route('/addNewPatient')
                 res.status(403).send({added:false,message:"Patient with email already exists!"});
             } else {
                 var profile = PatientProfile.create({
-                    defaults: {
                         first_name: patient.dataValues.first_name,
                         last_name: patient.dataValues.last_name,
                         profile_picture: null,
@@ -88,8 +87,16 @@ router.route('/addNewPatient')
                         gender: patient.dataValues.gender,
                         blood_type: null,
                         patient_id: patient.dataValues.patient_id,
+                    },
+                    { 
+                        fields: [
+                            "first_name", 
+                            "last_name",
+                            "gender",
+                            "patient_id"
+                        ] 
                     }
-                }).then (function (result2){
+                ).then (function (result2){
                     var profile2 = result2[0];
                     res.status(200).send({added:true,message:"Patient has been added successfully!", patient:patient, patient_id: profile2});
                 })

@@ -9,9 +9,15 @@ const DoctorRequest = require('./doctorRequest');
 const Doctor = require('./doctor');
 const DoctorProfile = require('./doctorProfile');
 const PatientProfile = require('./patientProfile');
+
+
 /** Relationship between Entities */
 DoctorProfile.belongsTo(Doctor, { foreignKey: 'doctor_id', constraints: false, as: 'doctor'})
+
+Patient.hasOne(PatientProfile, { foreignKey: "patient_id", as: "Patient_Profile"})
 PatientProfile.belongsTo(Patient, { foreignKey: 'patient_id', constraints: false, as: 'patient'})
+
+
 //User.hasMany(Post, { foreignKey: 'user_id', as: 'Posts' });
 //Post.belongsTo(User, { foreignKey: 'user_id', constraints: false, as: 'user' });
 
