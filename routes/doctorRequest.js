@@ -4,6 +4,8 @@ var router = express.Router();
 var nodemailer = require('nodemailer');
 const { DoctorRequest } = require('../models');
 const { Doctor } = require('../models');
+const { DoctorProfile } = require('../models');
+
 var generator = require('generate-password');
 const Op = require('sequelize').Op;
 
@@ -106,45 +108,71 @@ router.route('/approveRequest')
                     var doctor = result3[0] //the instance of the admin
                     var created = result3[1]; //boolean stating if the admin was created or not
                     if (!created){
-                        res.status(403).send({added:false,message:"Patient with email already exists!"});
+                        res.status(403).send({added:false,message:"Doctor with email already exists!"});
                     } else {
-                        console.log(email);
-                        var transporter = nodemailer.createTransport({
-                            service: process.env.MAIL_SERVICE,
-                            auth: {
-                                user: process.env.MAIL_USERNAME,
-                                pass: process.env.MAIL_PASSWORD
-                            }
-                        });
 
-                        if(process.env.ENV === "development"){
-                            console.log("New Doctor Added: ");
-                            console.log(email);
-                            console.log(password);
-                            res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
-                        }else{
-                            var mailOptions = {
-                                from: 'solicitudes@hondumedics.com',
-                                to: email,
-                                subject: 'Solicitud Hondumedics',
-                                text: "Su Solicitud ha sido aprobada! Su usuario es: " + email + " y su contraseña temporal es: "+password
+                        var doctor_profile = DoctorProfile.create({
+                                first_name: doctor.dataValues.first_name,
+                                last_name: doctor.dataValues.last_name,
+                                birthdate: null,
+                                profile_picture: null,
+                                description: null,
+                                address: null,
+                                doctor_id: doctor.dataValues.doctor_id,
+                            },
+                            { 
+                                fields: [
+                                    "first_name", 
+                                    "last_name",
+                                    "doctor_id"
+                                ] 
                             }
-    
-                            transporter.sendMail(mailOptions, function(error,info){
-                                if (error) {
-                                    console.log(error);
-                                }else{
-                                    res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
-                                    console.log('Email sent');
+                        ).then (function (result4){
+                            var profile2 = result4[0];
+
+                            console.log(email);
+                            var transporter = nodemailer.createTransport({
+                                service: process.env.MAIL_SERVICE,
+                                auth: {
+                                    user: process.env.MAIL_USERNAME,
+                                    pass: process.env.MAIL_PASSWORD
                                 }
                             });
-                        }
 
-                        
+                            if(process.env.ENV === "development"){
+                                console.log("New Doctor Added: ");
+                                console.log(email);
+                                console.log(password);
+                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
+                            }else{
+                                var mailOptions = {
+                                    from: 'solicitudes@hondumedics.com',
+                                    to: email,
+                                    subject: 'Solicitud Hondumedics',
+                                    text: "Su Solicitud ha sido aprobada! Su usuario es: " + email + " y su contraseña temporal es: "+password
+                                }
+        
+                                transporter.sendMail(mailOptions, function(error,info){
+                                    if (error) {
+                                        console.log(error);
+                                    }else{
+                                        res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
+                                        console.log('Email sent');
+                                    }
+                                });
+                            }
+                        }).catch(function(error3){
+                            console.log("Error 3");
+                            console.log(error3);
+                        });
                     }
-                });
-
-                
+                }).catch(function(error2){
+                    console.log("Error 2");
+                    console.log(error2);
+                });  
+            }).catch(function(error){
+                console.log("Error");
+                console.log(error);
             })
 
 

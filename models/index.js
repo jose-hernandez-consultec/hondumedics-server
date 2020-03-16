@@ -12,6 +12,7 @@ const PatientProfile = require('./patientProfile');
 
 
 /** Relationship between Entities */
+Doctor.hasOne(DoctorProfile, { foreignKey: 'doctor_id', as: "Doctor_Profile"})
 DoctorProfile.belongsTo(Doctor, { foreignKey: 'doctor_id', constraints: false, as: 'doctor'})
 
 Patient.hasOne(PatientProfile, { foreignKey: "patient_id", as: "Patient_Profile"})
