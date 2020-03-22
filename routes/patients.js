@@ -49,6 +49,29 @@ router.route('/patientLogin')
         });
     });
 
+    router.route('/getPatientById')
+    .post((req, res) => {
+        console.log(req.body.email);
+        return Patient.findOne(
+            { 
+                attributes: { exclude: ['password'] } 
+            },
+            {
+                where: {
+                    patient_id: req.body.patient_id
+                }
+            }
+        ).then(function (result) {
+            console.log(result);
+            if (result){
+                var patient = result.dataValues; //the instance of the admin
+                res.status(200).send({FOUND:true,message:"Found Patient!", patient:patient});
+            } else {
+                res.status(403).send({login:false,message:"Unknown user!"});
+            }
+        });
+    });
+
 router.route('/addNewPatient')
     .post((req, res) => {
         //Hash Password first
@@ -81,10 +104,12 @@ router.route('/addNewPatient')
                 var profile = PatientProfile.create({
                         first_name: patient.dataValues.first_name,
                         last_name: patient.dataValues.last_name,
+                        birthdate: patient.dataValues.birthdate,
                         profile_picture: null,
                         home_address: null,
                         work_address: null,
                         gender: patient.dataValues.gender,
+                        phone_numbe: null,
                         blood_type: null,
                         patient_id: patient.dataValues.patient_id,
                     },
@@ -92,6 +117,7 @@ router.route('/addNewPatient')
                         fields: [
                             "first_name", 
                             "last_name",
+                            "birthdate",
                             "gender",
                             "patient_id"
                         ] 

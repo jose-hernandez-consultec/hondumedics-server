@@ -8,7 +8,7 @@ const app = express();
 //var index = require('./routes/index');
 const admins = require('./routes/admins');
 const patients = require('./routes/patients');
-const patient_profile = require('./routes/patientProfile');
+const patient_profiles = require('./routes/patientProfile');
 const doctor_requests = require('./routes/doctorRequest');
 const doctors = require('./routes/doctors');
 const doctor_profile = require('./routes/doctorProfile')
@@ -18,8 +18,8 @@ const { sequelize } = require('./models');
 app.use(logger('dev'));
 
 //Parse incoming requests data
-app.use(bodyParser.urlencoded({ extended: true}));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cors());
 
 const PORT = process.env.PORT;
@@ -32,7 +32,7 @@ sequelize.sync()
 //app.use('/', index);
 app.use('/admins', admins);
 app.use('/patients', patients);
-
+app.use('/patientProfiles', patient_profiles);
 app.use('/doctorRequests', doctor_requests);
 app.use('/doctors', doctors);
 app.use('/doctorProfile', doctor_profile);

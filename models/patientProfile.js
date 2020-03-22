@@ -20,9 +20,13 @@ const PatientProfile = sequelize.define('PatientProfile', {
     home_address: {
       type: Sequelize.STRING
     },
+    birthdate: {
+      type: Sequelize.STRING
+    },
     work_address: { type: Sequelize.STRING },
     blood_type: { type: Sequelize.STRING },
     gender: { type: Sequelize.INTEGER },
+    phone_number: { type: Sequelize.INTEGER },
     patient_id: {
         type: Sequelize.INTEGER
     }
