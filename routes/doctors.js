@@ -34,8 +34,7 @@ router.route('/doctorLogin')
                     "email":doctor.email,
                     "first_name":doctor.first_name,
                     "last_name":doctor.last_name,
-                    "phone_number":doctor.phone_number,
-                    "specialty": doctor.specialty
+                    "first_time_logged_in":doctor.first_time_logged_in
                 };
 
                 if(bcrypt.compareSync(req.body.password, password)){
@@ -50,5 +49,41 @@ router.route('/doctorLogin')
         });
     });
 
+    router.route('/updateDoctorPassword')
+    .post((req, res) => {
+        return Doctor.findOne(
+            {
+                where: {
+                    email: req.body.email
+                }
+            }
+        ).then(function (result) {
+            console.log(result);
+            if (result){
+                var new_password = bcrypt.hashSync(req.body.password, 10);
+
+                var update = Doctor.update(
+                    {
+                        password: new_password,
+                        first_time_logged_in: 0
+                    },
+                    {
+                        where: {
+                            email: req.body.email
+                        }
+                    }
+                ).then(function (result2) {
+                    console.log(result2);
+                    if (result2){
+                        res.status(200).send({updated:true,message:"Password Updated!"});
+                    }
+                });
+                
+            } else {
+                res.status(403).send({message:"Server Error"});
+            }
+            
+        });
+    });
 
 module.exports = router;

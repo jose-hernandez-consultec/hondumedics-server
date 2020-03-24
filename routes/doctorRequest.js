@@ -40,15 +40,15 @@ router.route('/newDoctorRequest')
                 }
             }
         ).then(function (result) {
-
             var request = result[0] //the instance of the doctor request
             var created = result[1]; //boolean stating if the admin was created or not
-
             if (!created){
                 res.status(403).send({added:false,message:"The doctor has already requested to join and is pending approval!"});
             } else {
                 res.status(200).send({added:true,message:"Doctor Request Successfully created!!", doctor_request:request});
             }
+        }).error (function(error) {
+            res.status(403).send({added:false, already_exists:true});
         });
     });
 
@@ -143,7 +143,7 @@ router.route('/approveRequest')
                                 console.log("New Doctor Added: ");
                                 console.log(email);
                                 console.log(password);
-                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor});
+                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor, first_time_logged_in: doxtor.dataValues.first_time_logged_in});
                             }else{
                                 var mailOptions = {
                                     from: 'solicitudes@hondumedics.com',
