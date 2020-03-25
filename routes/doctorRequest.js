@@ -143,7 +143,7 @@ router.route('/approveRequest')
                                 console.log("New Doctor Added: ");
                                 console.log(email);
                                 console.log(password);
-                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor, first_time_logged_in: doxtor.dataValues.first_time_logged_in});
+                                res.status(200).send({added:true,message:"Doctor has been added successfully!", doctorData:doctor, first_time_logged_in: doctor.dataValues.first_time_logged_in});
                             }else{
                                 var mailOptions = {
                                     from: 'solicitudes@hondumedics.com',
