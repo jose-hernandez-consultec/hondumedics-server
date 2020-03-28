@@ -1,25 +1,13 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-const Hospital = sequelize.define('Hospital', {
-    hospital_id: {
+const Illness = sequelize.define('Illness', {
+    illness_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true
     },
-    hospital_name: {
-        type: Sequelize.STRING
-    },
-    city: {
-        type: Sequelize.STRING
-    },
-    department: {
-        type: Sequelize.STRING
-    },
-    directions: {
-        type: Sequelize.STRING
-    },
-    country: {
+    illness_name: {
         type: Sequelize.STRING
     }
 }, {
@@ -30,4 +18,4 @@ const Hospital = sequelize.define('Hospital', {
     underscoredAll: true
 });
 
-module.exports = Hospital;
+module.exports = Illness;

@@ -1,26 +1,25 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-const DoctorPatientAppointment = sequelize.define('DoctorPatientAppointment', {
-    appointment_id: {
-      type: Sequelize.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      autoIncrement: true,
+const Prescription = sequelize.define('Prescription', {
+    prescription_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true
     },
-    appointment_date: {
+    prescription_date: {
         type: Sequelize.STRING
     },
-    hospital_id: {
+    patient_id: {
         type: Sequelize.INTEGER
     },
     doctor_id: {
         type: Sequelize.INTEGER
     },
-    patient_id: {
+    hospital_id : {
         type: Sequelize.INTEGER
     }
-}, {
+},{
     createdAt: 'created_at',
     updatedAt: 'updated_at',
     timestamps: true,
@@ -28,4 +27,4 @@ const DoctorPatientAppointment = sequelize.define('DoctorPatientAppointment', {
     underscoredAll: true
 });
 
-module.exports = DoctorPatientAppointment;
+module.exports = Prescription;

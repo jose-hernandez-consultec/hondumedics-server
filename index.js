@@ -38,8 +38,7 @@ app.use('/patients', patients);
 app.use('/patientProfiles', patient_profiles);
 app.use('/doctorRequests', doctor_requests);
 app.use('/doctors', doctors);
-app.use('/doctorProfile', doctor_profile);
-app.use('/doctorProfile', doctor_profile);
+app.use('/doctorProfiles', doctor_profile);
 app.use('/doctorPatientAppointment', doctor_patient_appointment);
 
 

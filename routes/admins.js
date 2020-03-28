@@ -15,7 +15,6 @@ router.route('/')
 
 router.route('/adminLogin')
     .post((req, res) => {
-        console.log(req.body.email);
         return Admin.findOne(
             {
                 where: {
@@ -39,7 +38,6 @@ router.route('/adminLogin')
                 };
 
                 if(bcrypt.compareSync(req.body.password, password)){
-
                     var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400});
                     res.status(200).send({ auth: true, token: token, admin: admin });
                     //res.status(200).send({login:true,message:"Admin successfully logged in!", admin:admin});

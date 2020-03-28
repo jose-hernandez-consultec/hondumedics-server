@@ -49,12 +49,12 @@ router.route('/getPatientProfileByPatientID')
                 },
                 {
                     where: {
-                        patient_id: req.body.patient_id
+                        doctor_id: req.body.doctor_id
                     }
                 }
             ).then(function (result2) {
                 if (result2){
-                    var patient_profile = result2.dataValues; //the instance of the admin
+                    var doctor_profile = result2.dataValues; //the instance of the admin
                     res.status(200).send({updated:true,message:"Profile Picture Updated!",image: result.secure_url});
                 } else {
                     res.status(403).send({login:false,message:"Unknown Profile!"});

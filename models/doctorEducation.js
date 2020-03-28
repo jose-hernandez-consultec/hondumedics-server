@@ -1,26 +1,35 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-const Hospital = sequelize.define('Hospital', {
-    hospital_id: {
+const DoctorEducation = sequelize.define('DoctorEducation', {
+    education_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true
     },
-    hospital_name: {
+    institute_name: {
         type: Sequelize.STRING
     },
-    city: {
+    degree_obtained: {
         type: Sequelize.STRING
     },
-    department: {
+    description: {
         type: Sequelize.STRING
     },
-    directions: {
+    location: {
         type: Sequelize.STRING
     },
-    country: {
+    start_date: {
         type: Sequelize.STRING
+    },
+    end_date: {
+        type: Sequelize.STRING
+    },
+    current_education: {
+        type: Sequelize.BOOLEAN
+    },
+    doctor_id: {
+        type: Sequelize.INTEGER
     }
 }, {
     createdAt: 'created_at',
@@ -30,4 +39,4 @@ const Hospital = sequelize.define('Hospital', {
     underscoredAll: true
 });
 
-module.exports = Hospital;
+module.exports = DoctorEducation;

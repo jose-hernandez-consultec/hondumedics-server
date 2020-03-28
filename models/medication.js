@@ -1,25 +1,20 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-const Doctor = sequelize.define('Doctor', {
-    doctor_id: {
+const Medication = sequelize.define('Medication', {
+    medication_id: {
       type: Sequelize.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    first_name: {
+    medication_name: {
         type: Sequelize.STRING
     },
-    last_name:{
+    dosaje: {
         type: Sequelize.STRING
     },
-    email: {
-      type: Sequelize.STRING,
-      unique: true
-    },
-    password: { type: Sequelize.STRING(1024), },
-    first_time_logged_in: {
-        type: Sequelize.INTEGER
+    medication_cost: {
+        type: Sequelize.DECIMAL(10,2)
     }
 }, {
     createdAt: 'created_at',
@@ -29,4 +24,4 @@ const Doctor = sequelize.define('Doctor', {
     underscoredAll: true
 });
 
-module.exports = Doctor;
+module.exports = Medication;
