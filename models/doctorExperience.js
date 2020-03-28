@@ -5,6 +5,7 @@ const DoctorExperience = sequelize.define('DoctorExperience', {
     experience_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true
     },
     company_name: {
