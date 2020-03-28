@@ -5,6 +5,7 @@ const DoctorEducation = sequelize.define('DoctorEducation', {
     education_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true
     },
     institute_name: {
