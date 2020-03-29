@@ -17,9 +17,9 @@ const doctor_profile = require('./routes/doctorProfile');
 const doctor_patient_appointment = require('./routes/doctorPatientAppointment');
 const doctor_experience = require('./routes/doctorExperience');
 const doctor_education = require('./routes/doctorEducation');
-
+const appointments = require('./routes/doctorPatientAppointment');
+const hospitals = require('./routes/hospitals');
 const qualification = require('./routes/qualification');
-
 const { sequelize } = require('./models');
 
 app.use(logger('dev'));
@@ -46,8 +46,9 @@ app.use('/doctorProfiles', doctor_profile);
 app.use('/doctorPatientAppointment', doctor_patient_appointment);
 app.use("/doctorExperience", doctor_experience);
 app.use("/doctorEducation", doctor_education);
-
+app.use("/appointments", appointments);
 app.use("/qualification", qualification);
+app.use("/hospitals", hospitals);
 
 app.listen(PORT, () => {
   console.log(process.env.ENV);

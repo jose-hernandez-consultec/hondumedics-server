@@ -4,6 +4,7 @@ const sequelize = require('../config/sequelize');
 const Hospital = sequelize.define('Hospital', {
     hospital_id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },

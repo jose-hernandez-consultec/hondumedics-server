@@ -17,6 +17,12 @@ const DoctorPatientAppointment = sequelize.define('DoctorPatientAppointment', {
     doctor_id: {
         type: Sequelize.INTEGER
     },
+    approved: {
+        type: Sequelize.INTEGER
+    },
+    hospital_name: {
+        type: Sequelize.STRING
+    },
     patient_id: {
         type: Sequelize.INTEGER
     }

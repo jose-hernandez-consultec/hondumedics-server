@@ -3,7 +3,7 @@ const cloudinary = require("cloudinary").v2;
 var router = express.Router();
 
 const { PatientProfile } = require('../models');
-
+const { Patient } = require('../models');
 
 // cloudinary configuration
 cloudinary.config({
@@ -30,7 +30,39 @@ router.route('/getPatientProfileByPatientID')
                 }
             }
         ).then(function (result) {
+
+            
             if (result){
+
+
+                var patient_user = Patient.findOne(
+                    {
+                        where: {
+                            patient_id: req.body.patient_id
+                        }
+                    }
+                ).then(function (result2){
+                    var patient_profile = result.dataValues; //the instance of the admin
+                    var patient_user = result2.dataValues
+                    var patient_full = {
+                        patient_id: req.body.patient_id,
+                        first_name: patient_profile.first_name,
+                        last_name: patient_profile.last_name,
+                        profile_picture: patient_profile.profile_picture,
+                        home_address: patient_profile.home_address,
+                        birthdate: patient_profile.birthdate,
+                        work_address: patient_profile.work_address,
+                        blood_type: patient_profile.blood_type,
+                        gender: patient_profile.gender,
+                        phone_number: patient_profile.phone_number,
+                        email:patient_user.email
+                    }
+                    res.status(200).send({exists:true,message:"Found Profile!", patient_profile:patient_full});
+                });
+
+
+                var patient_profile = result.dataValues; //the instance of the admin
+                var patient_user = result2.dataValues
                 var patient_profile = result.dataValues; //the instance of the admin
                 res.status(200).send({exists:true,message:"Found Profile!", patient_profile:patient_profile});
             } else {
