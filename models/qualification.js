@@ -4,6 +4,7 @@ const sequelize = require('../config/sequelize');
 const Qualification = sequelize.define('Qualification', {
     qualification_id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },

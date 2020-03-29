@@ -60,7 +60,7 @@ router.route('/getDoctorExperienceByDoctorId')
         ).then(function (result) {
             console.log(result);
             var experience = result.dataValues; //the instance of the admin
-            res.status(200).send({added:true, experiences:result});
+            res.status(200).send(result);
         }).error(function (error){
             res.status(500).send({created:false, message:"A server error occured!"});
         });
