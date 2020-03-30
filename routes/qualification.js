@@ -12,10 +12,6 @@ router.route('/')
             .catch(err => res.status(500).send(err))
     });
 
-
-
-    
-
 router.route('/newDoctorQualification')
     .post((req, res) => {
         console.log(req.body);

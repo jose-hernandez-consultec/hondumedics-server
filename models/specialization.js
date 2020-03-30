@@ -4,6 +4,7 @@ const sequelize = require('../config/sequelize');
 const Specialization = sequelize.define('Specialization', {
    specialization_id: {
        type: Sequelize.INTEGER,
+       autoIncrement: true,
        allowNull: false,
        primaryKey: true
    },

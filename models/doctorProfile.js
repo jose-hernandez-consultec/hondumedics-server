@@ -28,6 +28,12 @@ const DoctorProfile = sequelize.define('DoctorProfile', {
     },
     doctor_id: { 
         type: Sequelize.INTEGER 
+    },
+    specialization_name: {
+        type: Sequelize.STRING,
+    },
+    specialization_id: {
+        type: Sequelize.INTEGER
     }
 }, {
     createdAt: 'created_at',
