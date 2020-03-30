@@ -13,6 +13,32 @@ router.route('/')
             .catch(err => res.status(500).send(err))
     });
 
+router.route('/getAdminByid')
+    .post((req, res) => {
+        return Admin.findOne(
+            {
+                attributes: {
+                    exclude: ['password']
+                }
+            },
+            {
+                where: {
+                    admin_id: req.body.admin_id
+                }
+            }
+        ).then(function (result) {
+            console.log(result);
+            if (result){
+                var admin = result.dataValues; //the instance of the admin
+                res.status(200).send({ found: true, admin: admin });
+            } else {
+                res.status(403).send({login:false,message:"Unknown user!"});
+            }
+            
+        });
+    });
+
+
 router.route('/adminLogin')
     .post((req, res) => {
         return Admin.findOne(
