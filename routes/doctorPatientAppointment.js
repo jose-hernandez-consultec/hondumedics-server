@@ -52,7 +52,6 @@ router.route('/getAllAppointmentsByDoctorId')
         return DoctorPatientAppointment.findAll(
             {
                 where: {
-                    appointment_id: req.body.appointment_id,
                     doctor_id: req.body.doctor_id
                 }
             }
