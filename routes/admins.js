@@ -4,8 +4,10 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 const { Admin } = require('../models');
 
-/* GET admin listing. */
-
+/* Archivo de rutas y procedimientos almacenados para la tabla admins 
+    En este archivo se establecen las rutas HTTP para establecer la conexion cliente-servidor entre el cliente (la aplicacion web)
+    y la base de datos con la tabla Admin
+*/
 
 /* Metodo GET HTTP que muestra el listado de todos los usuarios administradores */
 router.route('/')
@@ -41,21 +43,21 @@ router.route('/getAdminByid')
         });
     });
 
+/* Metodo POST HTTP, hace login de administradores  */
 
 router.route('/adminLogin')
     .post((req, res) => {
         return Admin.findOne(
             {
                 where: {
-                    email: req.body.email
+                    email: req.body.email //condicion WHERE, aca se indica que muestre solamente el administrador equivalente al email enviado
                 }
             }
         ).then(function (result) {
             console.log(result);
             if (result){
-                var admin = result.dataValues; //the instance of the admin
-                var password = admin.password; //boolean stating if the admin was created or not
-                //Check if passwords match
+                var admin = result.dataValues; //la instancia encontrada del administrador
+                var password = admin.password; //agarramos la contraseña encriptada
 
                 admin = {
                     "admin_id": admin.admin_id,
@@ -66,20 +68,22 @@ router.route('/adminLogin')
                     "access":admin.access
                 };
 
-                if(bcrypt.compareSync(req.body.password, password)){
-                    var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400});
+                if(bcrypt.compareSync(req.body.password, password)){ //se compara con bcrypt si la contranseña encriptada es igual a la ingresada
+                    var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400}); //se genera un json web token
                     res.status(200).send({ auth: true, token: token, admin: admin });
                     //res.status(200).send({login:true,message:"Admin successfully logged in!", admin:admin});
                 }else{
-                    res.status(403).send({login:false,message:"Incorrect Password!"});
+                    res.status(403).send({login:false,message:"Incorrect Password!"}); //enviar mensaje de error al cliente de contraseña incorrecta
                 }
             } else {
-                res.status(403).send({login:false,message:"Unknown user!"});
+                res.status(403).send({login:false,message:"Unknown user!"}); //enviar mensaje de error al cliente de usuario desconocido
+
             }
             
         });
     });
 
+/* Metodo POST HTTP, agrega un nuevo administrador */
 router.route('/addNewAdmin')
     .post((req, res) => {
         //Hash Password first
@@ -99,8 +103,8 @@ router.route('/addNewAdmin')
                 }
             }
         ).then(function (result) {
-            var admin = result[0] //the instance of the admin
-            var created = result[1]; //boolean stating if the admin was created or not
+            var admin = result[0] //la instancia del administrador agregado
+            var created = result[1]; //booleano para verificar si se hizo el insert a la base de datos
             if (!created){
                 res.status(403).send({added:false, message:"Admin with email already exists!"});
             } else {
@@ -114,12 +118,14 @@ router.route('/addNewAdmin')
         });
     });
 
+/* Metodo POST HTTP, editar un administrador */
 router.route('/editAdmin')
     .post((req, res) => {
         console.log(req.body);
         return Admin.update(
             {
-                username: req.body.username,
+                /*propiedades a actualizar, enviadas desde el cliente */
+                username: req.body.username, 
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 email: req.body.email,
@@ -127,32 +133,16 @@ router.route('/editAdmin')
             },
             {
                 where: {
-                    admin_id: req.body.admin_id
+                    admin_id: req.body.admin_id //condicion where, para obtener el administrador correspondiente de acuerdo al identificador
                 }
             }
         ).then(function (result) {
             if(result){
-                res.status(200).send({updated:true,message:"Admin updated!"});
+                res.status(200).send({updated:true,message:"Admin updated!"}); //respuesta enviada al cliente luego de actualizar
             }
         });
     });
 
-router.route('/deleteAdmin')
-    .post((req, res) => {
-        console.log(req.body);
-        return Admin.destroy(
-            {
-                where: {
-                    admin_id: req.body.admin_id
-                }
-            }
-        ).then(function (rowDeleted) {
-            if(rowDeleted === 1){
-                res.status(200).send({deleted:true,message:"Admin deleted!", rowsDeleted:rowDeleted});
-            }
-        }).error(function (error){
-            res.status(500).send({deleted:false,message:"An error has occured!"});
-        });
-    });
+
 
 module.exports = router;
