@@ -30,11 +30,7 @@ router.route('/getPatientProfileByPatientID')
                 }
             }
         ).then(function (result) {
-
-            
             if (result){
-
-
                 var patient_user = Patient.findOne(
                     {
                         where: {
@@ -43,8 +39,14 @@ router.route('/getPatientProfileByPatientID')
                     }
                 ).then(function (result2){
                     var patient_profile = result.dataValues; //the instance of the admin
-                    var patient_user = result2.dataValues
+                    var email = result2.dataValues.email
+                    //var patient_user2 = result2.dataValues;
+
+                    console.log("INSIDE");
+                    console.log(result2);
+
                     var patient_full = {
+                        email: email,
                         patient_id: req.body.patient_id,
                         first_name: patient_profile.first_name,
                         last_name: patient_profile.last_name,
@@ -54,17 +56,11 @@ router.route('/getPatientProfileByPatientID')
                         work_address: patient_profile.work_address,
                         blood_type: patient_profile.blood_type,
                         gender: patient_profile.gender,
-                        phone_number: patient_profile.phone_number,
-                        email:patient_user.email
+                        phone_number: patient_profile.phone_number
+                        
                     }
                     res.status(200).send({exists:true,message:"Found Profile!", patient_profile:patient_full});
                 });
-
-
-                var patient_profile = result.dataValues; //the instance of the admin
-                var patient_user = result2.dataValues
-                var patient_profile = result.dataValues; //the instance of the admin
-                res.status(200).send({exists:true,message:"Found Profile!", patient_profile:patient_profile});
             } else {
                 res.status(403).send({login:false,message:"Unknown Profile!"});
             }

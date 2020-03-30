@@ -119,6 +119,8 @@ router.route('/approveRequest')
                                 description: null,
                                 address: null,
                                 doctor_id: doctor.dataValues.doctor_id,
+                                specialization_name: null,
+                                specialization_id:null
                             },
                             { 
                                 fields: [

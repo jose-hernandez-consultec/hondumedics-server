@@ -50,6 +50,8 @@ router.route('/getDoctorProfileByDoctorID')
                         last_name:doctor_profile.last_name,
                         first_name:doctor_profile.first_name,
                         email:doctor_user.email,
+                        specialization_name: doctor_profile.specialization_name,
+                        specialization_id: doctor_profile.specialization_id
                     }
                     res.status(200).send({exists:true,message:"Found Profile!", doctor_profile:doctor_full});
                 });
@@ -90,7 +92,9 @@ router.route('/updateDoctorProfileByDoctorID')
                 first_name: req.body.first_name,
                 last_name: req.body.last_name,
                 birthdate: req.body.birthdate,
-                description: req.body.description
+                description: req.body.description,
+                specialization_name: req.body.specialization_name,
+                specialization_id: req.body.specialization_id
             },
             {
                 where: {

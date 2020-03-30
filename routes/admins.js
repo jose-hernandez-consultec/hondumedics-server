@@ -6,33 +6,36 @@ const { Admin } = require('../models');
 
 /* GET admin listing. */
 
+
+/* Metodo GET HTTP que muestra el listado de todos los usuarios administradores */
 router.route('/')
     .get((req, res) => {
-        Admin.findAll({ attributes: { exclude: ['password'] } })
+        Admin.findAll({ attributes: { exclude: ['password'] } }) //se excluye de mostrar las contraseñas
             .then(data => res.status(200).send(data))
             .catch(err => res.status(500).send(err))
     });
 
+ /* Metodo POST HTTP, muestra un administrador de acuerdo al identificador recibido como parametro enviado desde el cliente */
 router.route('/getAdminByid')
     .post((req, res) => {
         return Admin.findOne(
             {
                 attributes: {
-                    exclude: ['password']
+                    exclude: ['password'] //se excluye de mostrar las contraseñas
                 }
             },
             {
                 where: {
-                    admin_id: req.body.admin_id
+                    admin_id: req.body.admin_id //condicion WHERE, aca se indica que muestre solamente el administrador equivalente al id enviado
                 }
             }
         ).then(function (result) {
             console.log(result);
             if (result){
                 var admin = result.dataValues; //the instance of the admin
-                res.status(200).send({ found: true, admin: admin });
+                res.status(200).send({ found: true, admin: admin }); //respuesta enviada al cliente enviando la informacion del administrador encontrado
             } else {
-                res.status(403).send({login:false,message:"Unknown user!"});
+                res.status(403).send({login:false,message:"Unknown user!"}); //error enviado al cliente
             }
             
         });

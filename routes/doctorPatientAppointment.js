@@ -24,7 +24,13 @@ router.route('/newDoctorPatientAppointment')
                 hospital_name: req.body.hospital_name,
                 appointment_date: req.body.appointment_date,
                 doctor_id: req.body.doctor_id,
+                doctor_name: req.body.doctor_name,
+                doctor_picture: req.body.doctor_picture,
                 patient_id: req.body.patient_id,
+                patient_name: req.body.patient_name,
+                patient_picture: req.body.patient_picture,
+                patient_email: req.body.patient_email,
+                patient_number: req.body.patient_number,
                 approved: -1
             },
             { 
@@ -32,14 +38,22 @@ router.route('/newDoctorPatientAppointment')
                     "hospital_id",
                     "appointment_date",
                     "approved",
-                    "doctor_id", 
+                    "doctor_id",
+                    "doctor_name",
+                    "doctor_picture", 
                     "patient_id",
                     "hospital_name",
+                    "patient_name",
+                    "patient_picture",
+                    "patient_email",
+                    "patient_number"                
                 ] 
             }
         ).then(function (result) {
             var appointment = result[0]; //the instance of the admin
-            res.status(200).send({ created: true, appointment:appointment});
+            console.log("this is result");
+            console.log(result);
+            res.status(200).send({created: true, appointment:appointment});
         }).error(function (error){
             res.status(500).send({created:false, message:"A server error occured!"});
         });
@@ -117,7 +131,7 @@ router.route('/getAllRejectedAppointmentsByDoctorId')
     });
 
 router.route('/approveAppointment')
-    .get((req, res) => {
+    .post((req, res) => {
         return DoctorPatientAppointment.update(
             {
                 approved: 1,
@@ -135,8 +149,8 @@ router.route('/approveAppointment')
         });
     });
 
-    router.route('/rejectAppointment')
-    .get((req, res) => {
+router.route('/rejectAppointment')
+    .post((req, res) => {
         return DoctorPatientAppointment.update(
             {
                 approved: 0,
