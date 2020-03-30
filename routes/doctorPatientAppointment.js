@@ -14,6 +14,28 @@ router.route('/')
             .catch(err => res.status(500).send(err))
     });
 
+router.route('/getAllRejectedAppointments')
+    .get((req, res) => {
+        DoctorPatientAppointment.findAll({
+            where: {
+                approved: 0
+            }
+        })
+            .then(data => res.status(200).send(data))
+            .catch(err => res.status(500).send(err))
+    });
+
+router.route('/getAllApprovedApointments')
+    .get((req, res) => {
+        DoctorPatientAppointment.findAll({
+            where: {
+                approved: 1
+            }
+        })
+            .then(data => res.status(200).send(data))
+            .catch(err => res.status(500).send(err))
+    });
+
 router.route('/newDoctorPatientAppointment')
     .post((req, res) => {
         console.log(req.body);
@@ -75,6 +97,8 @@ router.route('/getAllAppointmentsByDoctorId')
             res.status(500).send({created:false, message:"A server error occured!"});
         });
     });
+
+
 
 router.route('/getAllPendingForApprovalAppointmentsByDoctorId')
     .post((req, res) => {
