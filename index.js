@@ -1,7 +1,5 @@
 require('dotenv').config();
 const express = require('express');
-
-
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -25,7 +23,11 @@ const specializations = require('./routes/specialization');
 const qualification = require('./routes/qualification');
 const { sequelize } = require('./models');
 
-app.use(logger('dev'));
+const winston = require('./winston');
+
+app.use(logger('combined', { stream: winston.stream }));
+
+//app.use(logger('dev'));
 
 //Parse incoming requests data
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -53,7 +55,22 @@ app.use("/appointments", appointments);
 app.use("/qualification", qualification);
 app.use("/hospitals", hospitals);
 app.use("/specializations", specializations);
+
+
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = dd + '/' + mm + '/' + yyyy;
+
+var currentdate = new Date(); 
+var datetime = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+
+
 app.listen(PORT, () => {
-  console.log(process.env.ENV);
-  console.log(`Server running at: http://localhost:${PORT}/`);
+
+	winston.info(`${today} ${datetime} - Iniciando servidor en: http://localhost:${PORT}/`);
+  	console.log(process.env.ENV);
+  	console.log(`Server running at: http://localhost:${PORT}/`);
 });

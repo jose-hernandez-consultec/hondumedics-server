@@ -4,6 +4,19 @@ var router = express.Router();
 var jwt = require('jsonwebtoken');
 const { Admin } = require('../models');
 
+
+const winston = require('../winston');
+
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = dd + '/' + mm + '/' + yyyy;
+
+var currentdate = new Date(); 
+var datetime = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+
 /* Archivo de rutas y procedimientos almacenados para la tabla admins 
     En este archivo se establecen las rutas HTTP para establecer la conexion cliente-servidor entre el cliente (la aplicacion web)
     y la base de datos con la tabla Admin
@@ -13,7 +26,12 @@ const { Admin } = require('../models');
 router.route('/')
     .get((req, res) => {
         Admin.findAll({ attributes: { exclude: ['password'] } }) //se excluye de mostrar las contraseñas
-            .then(data => res.status(200).send(data))
+            .then(function(data){
+ 
+                winston.info(`${today} ${datetime} - Obteniendo el listado de todos los usuarios administradores`);
+                res.status(200).send(data);
+
+            })
             .catch(err => res.status(500).send(err))
     });
 
@@ -36,7 +54,12 @@ router.route('/getAdminByid')
             if (result){
                 var admin = result.dataValues; //the instance of the admin
                 res.status(200).send({ found: true, admin: admin }); //respuesta enviada al cliente enviando la informacion del administrador encontrado
+                
+                winston.info(`${today} ${datetime} - Administrador con admin_id: ${req.body.admin_id} encontrado!`);
+
             } else {
+                winston.info(`${today} ${datetime} - ERROR! Administrador con admin_id: ${req.body.admin_id} no fue encontrado!`);
+
                 res.status(403).send({login:false,message:"Unknown user!"}); //error enviado al cliente
             }
             
@@ -70,12 +93,18 @@ router.route('/adminLogin')
 
                 if(bcrypt.compareSync(req.body.password, password)){ //se compara con bcrypt si la contranseña encriptada es igual a la ingresada
                     var token = jwt.sign({ admin_id: admin.admin_id }, process.env.SECRET_KEY, {expiresIn: 86400}); //se genera un json web token
+
+                    winston.info(`${today} ${datetime} - Administrador con admin_id: ${req.body.admin_id} ha iniciado sesion de manera exitosa!`);
                     res.status(200).send({ auth: true, token: token, admin: admin });
                     //res.status(200).send({login:true,message:"Admin successfully logged in!", admin:admin});
                 }else{
+                    winston.info(`${today} ${datetime} - ERROR! La contraseña del administrador con admin_id: ${req.body.admin_id} no fue la correcta!`);
                     res.status(403).send({login:false,message:"Incorrect Password!"}); //enviar mensaje de error al cliente de contraseña incorrecta
                 }
             } else {
+
+
+                winston.info(`${today} ${datetime} - ERROR! administrador con admin_id: ${req.body.admin_id} no fue encontrado!`);
                 res.status(403).send({login:false,message:"Unknown user!"}); //enviar mensaje de error al cliente de usuario desconocido
 
             }
